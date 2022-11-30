@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login Form</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Khula&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+      <img class = "img" src = "MapImg.png">
+      <div class = "container">
+		<div class="login-content">
+			<form action="login.html">
+				<h2 class="title">Login</h2>
+<!-- as div doesn't close so we get that here the input -div also in the login-content container or say as in the flexbox able to adjust  -->
+           		<div class="input-div one">
+           		   <div class="i">
+           		   		<i class="fas fa-user"></i> <!-- this is for the user icon n lock  -->
+           		   </div>
+           		   <div class="div">
+   <!-- so placeholder is for the property of having your text & then clicking to input something it goes away & new text is inserted -->
+       <input type="text" name = "username" placeholder = "username" required>
+           		   </div>
+           		</div>
+           	<!-- ending of input-div one -->
+           		<div class="input-div pass">
+           		   <div class="i"> 
+           		    	<i class="fas fa-lock"></i>
+           		   </div>
+           		   <div class="div">
+       <!-- so placeholder is for the property of having your text & then clicking to input something it goes away & new text is inserted -->     		    	
+           		    	<input type="password" name = "password" placeholder = "password" required>
+            	   </div>
+            	</div>
+            	<a href="#">Forgot Password?</a>
+            	<input type="submit" name = submit class="btn" value="Submit">
+            	<a href = "#">If new SignUp</a>
+            </form>
+        </div>
+    </div>
+    <script src = "MainJs.js"></script>
+</body>
+</html>
