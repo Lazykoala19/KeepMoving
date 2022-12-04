@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv = "X-UA-Compatible" content = "IE-edge">
+<meta name = "viewport" content = "width = device-width, initial scale = 1.0">
+<title>Implementing Map User Location</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+
+<style>
+#map {
+ height: 550px;     /*setting up size of map*/
+  }
+</style>
+</head>
+<body>
+<h1> Map Live-User Location </h1>
+<!-- Creating an element div in our body tag -->
+ <div id="map"></div>
+ 
+ <script>
+ //this made to initialize the map then specifying the div i.e. map then setting the elements lat, longitude & the zoom  
+ var map = L.map('map').setView([51.505, -0.09], 13);      //by this can see the interface for the app
+ // here u can call methods on base of name map
+ //now specifying where we getting the map data from here adding tilelayer i.e OpenStreetMap layer used for programming the Leaflet map
+ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+ 
+ navigator.geolocation.watchPosition(success, error);    //to watch users current location n calls n updates users current location n then success function fired
+ // so now as user moves shows multiple marker so to get only one marker n circle as the user moves eg say when walking 
+ //so declaring marker n circle outside the function hence in the global scope & update values of exiating variables
+ 
+ let marker, circle, zoomed;         //creating var zoomed here in global scope n returning zoomed var value down ---> for solving issue of reset value of zoom to not happen as location changes
+ 
+ 
+ function success(pos){
+	 const lat = pos.coords.latitude;
+	 const lng = pos.coords.longitude;
+	 const accuracy = pos.coords.accuracy;        // all this info gives idea how good lat n long are n how efficeient or accurate they are 
+
+	 
+	 if(marker){           //implementing if conditions for these variables
+		 map.removeLayer(marker);
+		 map.removeLayer(circle);
+	 }
+ //so here gonna check if marker(value)already exists in map for 1st time code runs if stat. is ignored but then as runs again n again marker n circle already there so it removes the earllier marker n circle layer by if stat. as the condn is true n then implements new marker n cicle
+ // result is only one marker n circle are there 
+	 
+//updating values here as circle n marker global var now
+	 marker = L.marker([lat, lng]).addTo(map);
+	 circle = L.circle([lat,lng, {radius: accuracy }]).addTo(map);  //so circle here setting the radius in it having to be set at the same latitude and longitude as the marker its going to have radius of meters relating to the accuracy   
+ 
+	  //so we want to update it to the users location everytime we r updating we want it to update n go to the current users location 
+     // so to set the current bounds of the map we can do i.e.
+
+     //line of code runs only when there's no value of zoom for the map
+     if (!zoomed){
+    	zoomed =  map.fitBounds(circle.getBounds());        //returning here zoom value by zoomed = statement 
+     }
+         //calling here the fitBounds method for getting the users current bound
+    //then would like to call get bounds method on circle so that zoom to be on that current location related only then returnig zoom value doing this as whenever new location set zoom level remain same i.e current set one n not get to its default value
+ // you would like above code to run only ONCE as when user changes location they might want to stay at certain level zoom n not change the level of zoom when changing location 
+ 
+    //to follow the markers sign as location changes at bigger scale i.e lat & long digit changes of front numbers one its marker changes now it should be seen for that 
+    map.setView([lat,lng]);
+ }
+ 
+ function error(err){        //if user has refused access to current location then error to be shown so what error method/function shows
+	  if(err.code === 1){
+		  alert("Please allow location access");
+	  }
+		  else {
+			  alert("Cannot get the current location");
+		  }
+	  } 
+	 
+ 
+  
+ </script>
+</body>
+</html>
