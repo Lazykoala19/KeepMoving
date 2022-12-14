@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keep_Moving</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" 
+integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" 
+crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+
+<style>
+#map {
+ height: 550px;     /*setting up size of map*/
+  }
+</style>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body >
+     <!--Navabar-->
+     <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3">
+        <div class="container">
+            <a herf="#" class="navbar-brand">Keep Moving</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="searchLocation.html" class="nav-link">Search Location</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="history.html" class="nav-link">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="aboutUs.html" class="nav-link">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div>
+        <div id="carouselCaptions" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+             
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="carousel_3.webp" class="d-block w-100" style="opacity: 0.8; height: 400; width: 450;" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                  <h2 style="color: black;font-weight: bold; text-align: center;">Explore nearby locations</h2>
+                  <!-- <p style="font-size: 30; color:black; opacity: 1;
+                            ;">Explore the places your nearby locations!.</p> -->
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="carousel_2.webp" class="d-block w-100"  style="opacity: 0.8; height: 200; width: 250;" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                  <h2 style="color: black;font-weight: bold; text-align: center;">Explore nearby locations</h2>
+                  <!-- <h5>Let's get Started</h5>
+                  <p>Some representative placeholder content for the third slide.</p> -->
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptions" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselCaptions" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        
+        
+    </div>
+     <!--Home-->
+    
+    <!--Services-->
+    <!-- <h1 class="text-center p-5"> <strong> <span class="text-dark">Places to Visit</strong></span>
+    </h1> -->
+    <h1 class="text-center p-5"><strong> <span class="text-dark"> Map Live-User Location</span><strong> </h1>
+<!-- Creating an element div in our body tag -->
+ <div id="map"></div>
+ 
+ <script>
+ //this made to initialize the map then specifying the div i.e. map then setting the elements lat, longitude & the zoom  
+ var map = L.map('map').setView([51.505, -0.09], 13);      //by this can see the interface for the app
+ // here u can call methods on base of name map
+ //now specifying where we getting the map data from here adding tilelayer i.e OpenStreetMap layer used for programming the Leaflet map
+ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+ 
+ navigator.geolocation.watchPosition(success, error);    //to watch users current location n calls n updates users current location n then success function fired
+ // so now as user moves shows multiple marker so to get only one marker n circle as the user moves eg say when walking 
+ //so declaring marker n circle outside the function hence in the global scope & update values of exiating variables
+ 
+ let marker, circle, zoomed;         //creating var zoomed here in global scope n returning zoomed var value down ---> for solving issue of reset value of zoom to not happen as location changes
+ 
+ 
+ function success(pos){
+	 const lat = pos.coords.latitude;
+	 const lng = pos.coords.longitude;
+	 const accuracy = pos.coords.accuracy;        // all this info gives idea how good lat n long are n how efficeient or accurate they are 
+
+	 
+	 if(marker){           //implementing if conditions for these variables
+		 map.removeLayer(marker);
+		 map.removeLayer(circle);
+	 }
+ //so here gonna check if marker(value)already exists in map for 1st time code runs if stat. is ignored but then as runs again n again marker n circle already there so it removes the earllier marker n circle layer by if stat. as the condn is true n then implements new marker n cicle
+ // result is only one marker n circle are there 
+	 
+//updating values here as circle n marker global var now
+	 marker = L.marker([lat, lng]).addTo(map);
+	 circle = L.circle([lat,lng, {radius: accuracy }]).addTo(map);  //so circle here setting the radius in it having to be set at the same latitude and longitude as the marker its going to have radius of meters relating to the accuracy   
+ 
+	  //so we want to update it to the users location everytime we r updating we want it to update n go to the current users location 
+     // so to set the current bounds of the map we can do i.e.
+
+     //line of code runs only when there's no value of zoom for the map
+     if (!zoomed){
+    	zoomed =  map.fitBounds(circle.getBounds());        //returning here zoom value by zoomed = statement 
+     }
+         //calling here the fitBounds method for getting the users current bound
+    //then would like to call get bounds method on circle so that zoom to be on that current location related only then returnig zoom value doing this as whenever new location set zoom level remain same i.e current set one n not get to its default value
+ // you would like above code to run only ONCE as when user changes location they might want to stay at certain level zoom n not change the level of zoom when changing location 
+ 
+    //to follow the markers sign as location changes at bigger scale i.e lat & long digit changes of front numbers one its marker changes now it should be seen for that 
+    map.setView([lat,lng]);
+ }
+ 
+ function error(err){        //if user has refused access to current location then error to be shown so what error method/function shows
+	  if(err.code === 1){
+		  alert("Please allow location access");
+	  }
+		  else {
+			  alert("Cannot get the current location");
+		  }
+	  } 
+	//  contact us
+ </script>
+ <section class="p-5">
+  <div class="container">
+      <div class="row g-4">
+          <div class="col-md">
+              <h2 class="text-center mb-4">Contact Info</h2>
+              <ul class="list-group list-group-flush lead">
+
+                  <li class="list-group-item">
+
+                      <!-- <span class="fw-bold">
+                          <h3><i class="bi bi-telephone"></i>
+                      </span>: <a href="https://wa.me/+918469070805" target="_blank">8469070805</a></h3>
+                  </li> -->
+                  <li class="list-group-item">
+                      <h2><i class="bi bi-mail"></i></h2>
+                      <span class="fw-bold">
+                          <h3><i class="bi bi-envelope"></i>
+                      </span>: <a href="mailto:devanshi.parikh.j@gmail.com"
+                          target="_blank">devanshi.parikh.j@gmail.com</a></h3>
+                  </li>
+                  <li class="list-group-item">
+                    <h2><i class="bi bi-mail"></i></h2>
+                    <span class="fw-bold">
+                        <h3><i class="bi bi-envelope"></i>
+                    </span>: <a href="mailto:7986.stkabirdin@gmail.com"
+                        target="_blank">7986.stkabirdin@gmail.com</a></h3>
+                </li>
+              </ul>
+          </div>
+      </div>
+  </div>
+</section>
+    <!--<hr class="line">-->
+    <!-- <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+          <div class="card h-50 w-60">
+            <img src="city_img.jpg" class="card-img-top" alt="City Ahmedbabad">
+            <div class="card-body">
+              <h5 class="card-title">City</h5>
+              <p class="card-text">"Ahmedabad is a cultured city with a rich heritage of craft and theatre."</p>
+              <a href="#" class="btn btn-dark">Read More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-48 w-60">
+            <img src="stations.jpg" class="card-img-top" alt="Station Ahmedabad">
+            <div class="card-body">
+              <h5 class="card-title">Station</h5>
+              <p class="card-text">"Stations of Ahmedabad".</p>
+              <a href="#" class="btn btn-dark">Read More</a>
+            </div>
+            
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-53 w-66">
+            <img src="area.jpg" class="card-img-top" alt="Area Ahmedabad">
+            <div class="card-body">
+              <h5 class="card-title">Areas</h5>
+              <p class="card-text">"Areas of Ahmedabad".</p>
+              <a href="#" class="btn btn-dark">Read More</a>
+            </div>
+            
+          </div>
+        </div>
+      </div> -->
+      <!--Empty Space-->
+      <div>
+
+        <br>
+        <br>
+
+
+
+
+
+
+      </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+     crossorigin="anonymous"></script>
+</body>
+</html>
